@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sam.admin.dao.UserMapper">
+	<resultMap id="userResultMap" type="com.sam.admin.entity.User">
+		<id property="id" column="id" />
+		<result property="username" column="username" />
+		<result property="loginname" column="loginname" />
+		<result property="password" column="password" />
+		<result property="phone" column="phone" />
+		<result property="birthday" column="birthday" />
+		<result property="sex" column="sex" />
+		<result property="mail" column="mail" />
+		<result property="address" column="address" />
+		<result property="role" column="role" />
+		<result property="del_flag" column="del_flag" />
+		<result property="question" column="question" />
+		<result property="answord" column="answord" />
+	</resultMap>
+
+	<select id="selectUserById" parameterType="java.lang.Integer" resultMap="userResultMap">
+		SELECT * FROM tb_user where id = #{id}
+	</select>
+	<select id="selectUserByName" parameterType="string" resultMap="userResultMap">
+		SELECT * FROM tb_user where loginname = #{name} and role = 'seller'
+	</select>
+	<select id="selectUserByPhone" parameterType="string" resultMap="userResultMap">
+		select * from tb_user where phone = #{phone}
+	</select>
+	<insert id="insertUser" parameterType="com.sam.admin.entity.User">
+		insert into tb_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="username != null">
+				username,
+			</if>
+			<if test="loginname != null">
+				loginname,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="birthday != null">
+				birthday,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			role,
+			del_flag,
+			<if test="question != null">
+				question,
+			</if>
+			<if test="answer != null">
+				answer
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="loginname != null">
+				#{loginname,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null">
+				#{birthday,jdbcType=DATE},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=CHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			'admin',
+			1,
+			<if test="question != null">
+				#{question,jdbcType=VARCHAR},
+			</if>
+			<if test="answer != null">
+				#{answer,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateSellerpwd" parameterType="map">
+		update tb_user
+		<set>
+			<if test="user.username!=null">
+				username = #{user.username,jdbcType=VARCHAR},
+			</if>
+			<if test="user.loginname!=null">
+				loginname = #{user.loginname,jdbcType=VARCHAR},
+			</if>
+			<if test="user.password!=null">
+				password = #{user.password,jdbcType=VARCHAR},
+			</if>
+			<if test="user.phone!=null">
+				phone = #{user.phone,jdbcType=VARCHAR},
+			</if>
+			<if test="user.birthday!=null">
+				birthday = #{user.birthday,jdbcType=DATE},
+			</if>
+			<if test="user.sex!=null">
+				sex = #{user.sex,jdbcType=CHAR},
+			</if>
+			<if test="user.email!=null">
+				email = #{user.email,jdbcType=VARCHAR},
+			</if>
+			<if test="user.address!=null">
+				address = #{user.address,jdbcType=VARCHAR},
+			</if>
+			<if test="user.role!=null">
+				role = #{user.role,jdbcType=VARCHAR},
+			</if>
+			<if test="user.del_flag!=null">
+				del_flag = #{user.del_flag,jdbcType=INTEGER},
+			</if>
+			<if test="user.question!=null">
+				question = #{user.question,jdbcType=VARCHAR},
+			</if>
+			<if test="user.answer!=null">
+				answer = #{user.answer,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where loginname = #{user.loginname}
+	</update>
+</mapper>

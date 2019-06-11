@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sam.dao.CartMapper">
+	<resultMap id="cartResultMap" type="com.sam.entity.Cart">
+		<id property="id" column="id" />
+		<result property="user_loginname" column="user_loginname" />
+		<result property="book_uuid" column="book_uuid" />
+
+	</resultMap>
+
+	<select id="selectCartByUserLoginname" parameterType="string" resultMap="cartResultMap">
+		select * from tb_book_cart
+		<where>
+			<if test="user_loginname!=null">
+				user_loginname = #{user_loginname}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectCartByBookUuid" parameterType="string" resultMap="cartResultMap">
+		select * from tb_book_cart
+		<where>
+			<if test="book_uuid != null">
+				book_uuid = #{book_uuid}
+			</if>
+		</where>
+	</select>
+
+	<insert id="insertCart" parameterType="com.sam.entity.Cart">
+		insert into tb_book_cart
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id!=null">
+				id,
+			</if>
+			<if test="user_loginname!=null">
+				user_loginname,
+			</if>
+			<if test="book_uuid!=null">
+				book_uuid,
+			</if>
+
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id!=null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="user_loginname!=null">
+				#{user_loginname,jdbcType=VARCHAR},
+			</if>
+			<if test="book_uuid!=null">
+				#{book_uuid,jdbcType=VARCHAR},
+			</if>
+
+		</trim>
+	</insert>
+
+	<!-- <update id="updateCart" parameterType="com.sam.entity.Cart"> update tb_book_cart <set> <if test="id!=null"> #{id,jdbcType=INTEGER} 
+		</if> <if test="user_loginname!=null"> #{user_loginname,jdbcType=VARCHAR} </if> <if test="book_uuid!=null"> #{book_uuid,jdbcType=VARCHAR} 
+		</if> <if test="book_name!=null"> #{book_name,jdbcType=VARCHAR} </if> <if test="book_price!=null"> #{book_price,jdbcType=DOUBLE} </if> 
+		<if test="count!=null"> count = #{count,jdbcType=DOUBLE}, </if> <if test="totalprice!=null"> totalprice = #{totalprice,jdbcType=DOUBLE} 
+		</if> </set> <where> <if test="user_loginname!=null"> user_loginname = #{user_loginname} </if> <if test="book_uuid!=null"> and book_uuid 
+		= #{book_uuid} </if> <if test="book_name!=null"> and book_name = #{book_name} </if> </where> </update> -->
+
+	<delete id="deleteCart" parameterType="com.sam.entity.Cart">
+		delete from tb_book_cart
+		<where>
+			<if test="user_loginname!=null">
+				user_loginname = #{user_loginname}
+			</if>
+			<if test="book_uuid!=null">
+				and book_uuid = #{book_uuid}
+			</if>
+		</where>
+	</delete>
+
+	<select id="selectCartByBookUuidWithLoginname" resultMap="cartResultMap">
+		select * from tb_book_cart
+		where user_loginname = #{user_loginname}
+		and book_uuid = #{book_uuid}
+
+	</select>
+
+</mapper>

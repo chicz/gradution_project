@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sam.admin.dao.BookMapper">
+	<resultMap id="bookResultMap" type="com.sam.admin.entity.Book">
+		<id property="id" column="id" />
+		<result property="uuid" column="uuid" />
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		<result property="grade" column="grade" />
+		<result property="remark" column="remark" />
+		<result property="count" column="count" />
+		<result property="out_count" column="out_count" />
+		<result property="author" column="author" />
+		<result property="press" column="press" />
+		<result property="version" column="version" />
+		<result property="pic_0" column="pic_0" />
+		<result property="pic_1" column="pic_1" />
+		<result property="pic_2" column="pic_2" />
+		<result property="pic_3" column="pic_3" />
+		<result property="pic_4" column="pic_4" />
+		<result property="status" column="status" />
+		<result property="del_flag" column="del_flag" />
+		<result property="owner_name" column="owner_name"/>
+	</resultMap>
+	<resultMap id="WithSortResultMap" type="com.sam.admin.entity.Book">
+		<id property="id" column="id" />
+		<result property="uuid" column="uuid" />
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		<result property="grade" column="grade" />
+		<result property="remark" column="remark" />
+		<result property="count" column="count" />
+		<result property="out_count" column="out_count" />
+		<result property="author" column="author" />
+		<result property="press" column="press" />
+		<result property="version" column="version" />
+		<result property="pic_0" column="pic_0" />
+		<result property="pic_1" column="pic_1" />
+		<result property="pic_2" column="pic_2" />
+		<result property="pic_3" column="pic_3" />
+		<result property="pic_4" column="pic_4" />
+		<result property="status" column="status" />
+		<result property="del_flag" column="del_flag" />
+		<result property="owner_name" column="owner_name"/>
+		<association property="sort" javaType="com.sam.admin.entity.Sort">
+			<id column="id" property="id" />
+			<result column="sort_0" property="sort_0" />
+			<result column="sort_1" property="sort_1" />
+			<result column="number" property="number" />
+		</association>
+	</resultMap>
+
+	<select id="selectBookById" parameterType="java.lang.Integer" resultMap="bookResultMap">
+		SELECT * FROM tb_book where id = #{id} and del_flag='1'
+	</select>
+	<select id="selectBookByUuid" parameterType="string" resultMap="bookResultMap">
+		SELECT * FROM tb_book where uuid = #{uuid} and del_flag='1'
+	</select>
+	<select id="selectBookNameLike" parameterType="string" resultMap="bookResultMap">
+		<!-- SELECT * FROM tb_book where name like concat(concat('%',#{name}),'%') -->
+		<bind name="pattern" value="'%'+ _parameter.getName() +'%'" />
+		select * from tb_book where name like #{pattern} and del_flag='1'
+	</select>
+	<select id="selectBookAll" resultMap="bookResultMap">
+		select * from tb_book where del_flag='1'
+	</select>
+	<select id="selectBookSortByBookuuid" resultMap="WithSortResultMap">
+		select * from tb_book left join tb_book_sort on tb_book.`uuid`=tb_book_sort.`book_uuid`
+		left join tb_sort on tb_book_sort.`sort_number`=tb_sort.`number`
+		where uuid = #{uuid,jdbcType=VARCHAR} and del_flag='1'
+	</select>
+	
+	<select id="selectBookBySort_1" parameterType="string" resultMap="bookResultMap">
+	    select * from tb_book where uuid in
+	      (select book_uuid from tb_book_sort where sort_number = 
+	          (select number from tb_sort where sort_1 = #{sort_1})
+	      ) and del_flag='1'
+	</select>
+	
+	<select id="selectBookBySort_0" parameterType="string" resultMap="bookResultMap">
+	    select * from tb_book where uuid in
+	      (select book_uuid from tb_book_sort where sort_number in 
+	          (select number from tb_sort where sort_0 = #{sort_0})
+	      ) and del_flag='1'
+	</select>
+	
+	<select id="selectBookByConditions" resultMap="WithSortResultMap">
+	    <bind name="pattern" value="'%'+ name +'%'" />
+	    select * from tb_book left join tb_book_sort on tb_book.`uuid`=tb_book_sort.`book_uuid`
+		left join tb_sort on tb_book_sort.`sort_number`=tb_sort.`number`
+		
+		<where>
+		    <if test="name!=null and name!=''">
+		        name like #{pattern}
+		    </if>
+		    <if test="uuid!=null and uuid!=''">
+		        and uuid = #{uuid}
+		    </if>
+		    <if test="sort_0!=null and sort_0!=''">
+		        and tb_sort.sort_0 = #{sort_0}
+		    </if>
+		    <if test="sort_1!=null and sort_1!=''">
+		        and tb_sort.sort_1 = #{sort_1}
+		    </if>
+		    <if test="status!=null and status!=''">
+		        and status = #{status}
+		    </if>
+		    and del_flag = '1' and owner_name = #{owner_name}
+		</where>
+		
+		<!-- select a.*,b.* from tb_book a,tb_sort b,tb_book_sort c
+		<where>
+		    b.number = c.sort_number and c.book_uuid = a.uuid
+		    <if test="name != null and name != ''">
+		        and name like #{pattern}
+		    </if>
+		    <if test="uuid!=null and uuid!=''">
+		        and uuid = #{uuid}
+		    </if>
+		    <if test="status!=null and status!=''">
+		        and status = #{status}
+		    </if>
+		    <if test="sort_0!=null and sort_0!=''">
+		        and b.sort_0 = #{sort_0}
+		    </if>
+		    <if test="sort_1!=null and sort_1!=''">
+		        and b.sort_1 = #{sort_1}
+		    </if>
+		</where> -->
+	</select>
+	
+	<update id="updateStatusByUuid">
+	    update tb_book 
+	    <set>
+			<if test="status != null">
+				status = #{status,jdbcType=CHAR},
+			</if>
+		</set>
+		<where>
+		    <if test="uuid != null">
+		        uuid = #{uuid}
+		    </if>
+		</where>
+	</update>
+	<update id="delBookByUuid">
+	    update tb_book
+	    <if test="uuid !=null and uuid != ''">
+	        set del_flag = '0'
+	    </if>
+	    <where>
+		    <if test="uuid != null">
+		        uuid = #{uuid}
+		    </if>
+		</where>
+	    
+	</update>
+	
+	<insert id="insertBook" parameterType="com.sam.admin.entity.Book">
+	    insert into tb_book
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	        <if test="id!=null">
+				id,
+			</if>
+			<if test="uuid!=null">
+				uuid,
+			</if>
+			<if test="name!=null">
+				name,
+			</if>
+			<if test="price!=null">
+				price,
+			</if>
+			<if test="grade!=null">
+				grade,
+			</if>
+			<if test="remark!=null">
+				remark,
+			</if>
+			<if test="count!=null">
+				count,
+			</if>
+			<if test="out_count!=null">
+				out_count,
+			</if>
+			<if test="author!=null">
+				author,
+			</if>
+			<if test="press!=null">
+				press,
+			</if>
+			<if test="version!=null">
+				version,
+			</if>
+			<if test="pic_0!=null">
+				pic_0,
+			</if>
+			<if test="pic_1!=null">
+				pic_1,
+			</if>
+			<if test="pic_2!=null">
+				pic_2,
+			</if>
+			<if test="pic_3!=null">
+				pic_3,
+			</if>
+			<if test="pic_4!=null">
+				pic_4,
+			</if>
+			<if test="status!=null">
+				status,
+			</if>
+			<if test="del_flag!=null">
+				del_flag,
+			</if>
+			<if test="owner_name!=null">
+				owner_name,
+			</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	        <if test="id!=null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="uuid!=null">
+				#{uuid,jdbcType=VARCHAR},
+			</if>
+			<if test="name!=null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="price!=null">
+				#{price,jdbcType=DOUBLE},
+			</if>
+			<if test="grade!=null">
+				#{grade,jdbcType=INTEGER},
+			</if>
+			<if test="remark!=null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="count!=null">
+				#{count,jdbcType=INTEGER},
+			</if>
+			<if test="out_count!=null">
+				#{out_count,jdbcType=INTEGER},
+			</if>
+			<if test="author!=null">
+				#{author,jdbcType=VARCHAR},
+			</if>
+			<if test="press!=null">
+				#{press,jdbcType=VARCHAR},
+			</if>
+			<if test="version!=null">
+				#{version,jdbcType=VARCHAR},
+			</if>
+			<if test="pic_0!=null">
+				#{pic_0,jdbcType=VARCHAR},
+			</if>
+			<if test="pic_1!=null">
+				#{pic_1,jdbcType=VARCHAR},
+			</if>
+			<if test="pic_2!=null">
+				#{pic_2,jdbcType=VARCHAR},
+			</if>
+			<if test="pic_3!=null">
+				#{pic_3,jdbcType=VARCHAR},
+			</if>
+			<if test="pic_4!=null">
+				#{pic_4,jdbcType=VARCHAR},
+			</if>
+			<if test="status!=null">
+				#{status,jdbcType=CHAR},
+			</if>
+			<if test="del_flag!=null">
+				#{del_flag,jdbcType=CHAR},
+			</if>
+			<if test="owner_name!=null">
+				#{owner_name,jdbcType=VARCHAR},
+			</if>
+	    </trim>
+	</insert>
+	
+	<update id="setBookCountByUuid">
+	    update tb_book
+	    <if test="uuid !=null and uuid != ''">
+	        set count = #{count}
+	    </if>
+	    <where>
+		    <if test="uuid != null">
+		        uuid = #{uuid}
+		    </if>
+		</where>
+	    
+	</update>
+
+</mapper>

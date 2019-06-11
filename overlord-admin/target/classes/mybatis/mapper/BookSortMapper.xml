@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sam.admin.dao.BookSortMapper">
+	<resultMap id="bookSortResultMap" type="com.sam.admin.entity.BookSort">
+		<id property="id" column="id" />
+		<result property="sort_number" column="sort_number" />
+		<result property="book_uuid" column="book_uuid" />
+	</resultMap>
+
+	<insert id="insertSortNumberAndUuid">
+		insert into tb_book_sort
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sort_number!=null">
+				sort_number,
+			</if>
+			<if test="book_uuid!=null">
+				book_uuid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sort_number!=null">
+				#{sort_number,jdbcType=VARCHAR},
+			</if>
+			<if test="book_uuid!=null">
+				#{book_uuid,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+</mapper>

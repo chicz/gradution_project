@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="overlord:war">
+    <output-path>$PROJECT_DIR$/overlord/target</output-path>
+    <root id="archive" name="overlord.war">
+      <element id="artifact" artifact-name="overlord:war exploded" />
+    </root>
+  </artifact>
+</component>

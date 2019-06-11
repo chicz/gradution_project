@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sam.dao.OrderMapper">
+	<resultMap id="cartResultMap" type="com.sam.entity.Order">
+		<id property="id" column="id" />
+		<result property="order_number" column="order_number" />
+		<result property="book_uuid" column="book_uuid" />
+		<result property="book_name" column="book_name" />
+		<result property="book_oneprice" column="book_oneprice" />
+		<result property="book_count" column="book_count" />
+		<result property="book_totalprice" column="book_totalprice" />
+		<result property="buyer_loginname" column="buyer_loginname" />
+		<result property="buyer_phone" column="buyer_phone" />
+		<result property="seller_name" column="seller_name" />
+		<result property="seller_phone" column="seller_phone" />
+		<result property="maketime" column="maketime" />
+		<result property="status" column="status" />
+		<result property="del_flag" column="del_flag" />
+	</resultMap>
+
+	<insert id="insertOrder" parameterType="com.sam.entity.Order">
+		insert into tb_orders
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id!=null">
+				id,
+			</if>
+			<if test="order_number!=null">
+				order_number,
+			</if>
+			<if test="book_uuid!=null">
+				book_uuid,
+			</if>
+			<if test="book_name!=null">
+				book_name,
+			</if>
+			<if test="book_oneprice!=null">
+				book_oneprice,
+			</if>
+			<if test="book_count!=null">
+				book_count,
+			</if>
+			<if test="book_totalprice!=null">
+				book_totalprice,
+			</if>
+			<if test="buyer_loginname!=null">
+				buyer_loginname,
+			</if>
+			<if test="buyer_phone">
+			    buyer_phone,
+			</if>
+			<if test="seller_name!=null">
+				seller_name,
+			</if>
+			<if test="seller_phone">
+			    seller_phone,
+			</if>
+			<if test="maketime!=null">
+			    maketime,
+			</if>
+			
+			status,
+			del_flag,
+			
+		</trim>
+		
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id!=null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="order_number!=null">
+				#{order_number,jdbcType=VARCHAR},
+			</if>
+			<if test="book_uuid!=null">
+				#{book_uuid,jdbcType=VARCHAR},
+			</if>
+			<if test="book_name!=null">
+				#{book_name,jdbcType=VARCHAR},
+			</if>
+			<if test="book_oneprice!=null">
+				#{book_oneprice,jdbcType=DOUBLE},
+			</if>
+			<if test="book_count!=null">
+				#{book_count,jdbcType=INTEGER},
+			</if>
+			<if test="book_totalprice!=null">
+				#{book_totalprice,jdbcType=DOUBLE},
+			</if>
+			<if test="buyer_loginname!=null">
+				#{buyer_loginname,jdbcType=VARCHAR},
+			</if>
+			<if test="buyer_phone">
+			    #{buyer_phone,jdbcType=VARCHAR},
+			</if>
+			<if test="seller_name!=null">
+				#{seller_name,jdbcType=VARCHAR},
+			</if>
+			<if test="seller_phone">
+			    #{seller_phone,jdbcType=VARCHAR},
+			</if>
+			<if test="maketime!=null">
+			    #{maketime,jdbcType=DATE},
+			</if>
+			'1',
+			'1',
+			
+		</trim>
+	</insert>
+
+	<delete id="deleteOrder" parameterType="string">
+	    <!-- 删除就不建议使用where if动态sql，万一传过来的是空，那么就把所有的订单都删除了 -->
+		delete from tb_orders where order_number = #{order_number}
+	</delete>
+	
+	<select id="selectOrderByOrderNumber" parameterType="string" resultMap="cartResultMap">
+	    select * from tb_orders where order_number = #{order_number}
+	</select>
+	
+	<select id="selectOrderNumberByBuyername" parameterType="string" resultMap="cartResultMap">
+	    select distinct order_number from tb_orders where buyer_loginname = #{buyer_loginname}
+	</select>
+
+</mapper>

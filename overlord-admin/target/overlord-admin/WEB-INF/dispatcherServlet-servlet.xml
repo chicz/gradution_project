@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+	<!-- springMVC的配置文件，包含网站跳转逻辑的控制，配置 -->
+	<!-- <context:component-scan base-package="com.sam" use-default-filters="false">
+		只扫描控制器
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan> -->
+	<context:component-scan base-package="com.sam" />
+
+	<!-- 配置视图解析器，方便页面返回 -->
+	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>  -->
+
+	<!-- 两个标准配置 -->
+	<!-- 将springmvc不能处理的请求交给tomcat -->
+	<mvc:default-servlet-handler />
+	<!-- 能支持springmvc更高级的一些功能，jsr303校验,快捷的ajax...映射动态请求 -->
+	<mvc:annotation-driven />
+
+	<!-- 下列配置是防止spring拦截器把bootstrap、H-UI或其他一些css、js给拦截了 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/static/**" />
+			<mvc:exclude-mapping path="/lib/**"/>
+			<bean class="com.sam.admin.interceptor.AuthorizationInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<!-- 开启基于注解的事务，使用xml配置形式的事务（必要主要的使用配置式） -->
+ 	<aop:config>
+		<!-- 切入点表达式 -->
+		<aop:pointcut expression="execution(* com.sam.admin.service..*(..))" id="txPoint" />
+		<!-- 配置事务增强 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint" />
+	</aop:config> 
+
+</beans>

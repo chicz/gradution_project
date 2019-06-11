@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="stylesheet" type="text/css" href="${base}/static/pic-upload/css/base.css">
+<link rel="stylesheet" type="text/css" href="${base}/static/pic-upload/css/home.css">
+<link rel="stylesheet" type="text/css" href="${base}/static/h-ui/css/H-ui.css">
+
+</head>
+<body>
+	<section class="aui-content">
+		<div style="height: 20px;"></div>
+		<div class="aui-content-up">
+			<form id="add_book_form" action="${base}/add/add_book" name="add_book_form" method="post" enctype="multipart/form-data">
+				<div class="">
+					<h2></h2>
+				</div>
+				<div class="aui-form-group clear">
+					<label class="aui-label-control">
+						商品名称
+						<em>*</em>
+					</label>
+					<div class="aui-form-input">
+						<input type="text" class="aui-form-control-two" name="bookname" onBlur="" required id="bookname" placeholder="请输入商品名称">
+						<span class="tips" id="bookname_tip"></span>
+					</div>
+				</div>
+				<div class="aui-form-group clear">
+					<label class="aui-label-control">
+						商品单价
+						<em>*</em>
+					</label>
+					<div class="aui-form-input">
+						<input type="text" class="aui-form-control-two" name="bookprice" id="bookprice" placeholder="请输入商品单价" onBlur="checkpr()" required />
+						<span class="tips" id="bookprice_tip"></span>
+					</div>
+				</div>
+				<div class="aui-form-group clear">
+					<label class="aui-label-control">
+						新旧等级
+						<em>*</em>
+					</label>
+					<div class="aui-form-input">
+						<span class="select-box">
+							<select class="select column_search" id="bookgrade" name="bookgrade" onchange="">
+								<option value="1">破损</option>
+								<option value="2" selected>模糊</option>
+								<option value="3">工整</option>
+								<option value="4">较新</option>
+								<option value="5">全新</option>
+							</select>
+						</span>
+						<span class="tips" id="bookgrade_tip"></span>
+					</div>
+				</div>
+				<div class="aui-form-input">
+					<h5>-----------------------------------书籍信息----------------------------------</h5>
+				</div>
+				<div class="aui-form-group clear">
+					<label class="aui-label-control">
+						作者
+						<em>*</em>
+					</label>
+					<div class="aui-form-input">
+						<input type="text" class="aui-form-control-two" name="bookauthor" id="bookauthor" placeholder="请输入作者称呼" onBlur="" required />
+						<span class="tips" id="bookauthor_tip"></span>
+					</div>
+				</div>
+				<div class="aui-form-group clear">
+					<label class="aui-label-control">
+						出版社
+						<em>*</em>
+					</label>
+					<div class="aui-form-input">
+						<input type="text" class="aui-form-control-two" name="bookpress" id="bookpress" placeholder="请输入出版社名称" onBlur="" required />
+						<span class="tips" id="bookpress_tip"></span>
+					</div>
+				</div>
+				<div class="aui-form-group clear">
+					<label class="aui-label-control">
+						版本号
+						<em>*</em>
+					</label>
+					<div class="aui-form-input">
+						<input type="text" class="aui-form-control-two" name="bookversion" id="bookversion" placeholder="请输入版本号" onBlur="" required />
+						<span class="tips" id="bookversion_tip"></span>
+					</div>
+				</div>
+
+				<div class="aui-form-group clear">
+					<label class="aui-label-control">
+						所属分类
+						<em>*</em>
+					</label>
+					<div id="sort_0" class="formControls col-xs-2 col-sm-2 col-md-2 haha">
+						<span class="select-box">
+							<select class="select column_search" id="commodityTypeId1" name="commodityTypeId1" onchange="getSort_1('#sort_1 select')">
+								<option value="">全部</option>
+							</select>
+						</span>
+					</div>
+					<div id="sort_1" class="formControls col-xs-2 col-sm-2 col-md-2 haha">
+						<span class="select-box">
+							<select class="select column_search" id="commodityTypeId2" name="commodityTypeId2">
+								<option value="">全部</option>
+							</select>
+						</span>
+					</div>
+				</div>
+
+				<div class="aui-form-group clear">
+					<label class="aui-label-control">
+						书籍图片
+						<em>*</em>
+						<span>小于5M</span>
+					</label>
+					<div class="aui-form-input">
+						<div class="aui-content-img-box aui-content-full">
+							<div class="aui-photo aui-up-img clear">
+								<section class="aui-file-up fl">
+									<img src="${base}/static/pic-upload/img/up.png" class="add-img">
+									<input type="file" name="file" id="file" class="file" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple="multiple" />
+								</section>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="aui-form-group clear">
+					<label class="aui-label-control"> 书籍描述  </label>
+					<div class="aui-form-input">
+						<textarea class="aui-form-control" name="bookremark" id="bookremark" minlength="5">这个人很懒，什么都没有留下~</textarea>
+					</div>
+				</div>
+				<div class="aui-form-group clear">
+					
+				</div>
+			</form>
+		</div>
+		<div class="aui-btn-default">
+			<button id="add_book_btn" class="aui-btn aui-btn-account">保存并提交</button>
+		</div>
+	</section>
+	<!-- mask begin -->
+	<div class="aui-mask aui-works-mask">
+		<div class="aui-mask-content">
+			<p class="aui-delete-text">确定要删除你上传的图片？</p>
+			<p class="aui-check-text">
+				<span class="aui-delete aui-accept-ok">确定</span>
+				<span class="aui-accept-no">取消</span>
+			</p>
+		</div>
+	</div>
+	<!-- mask end -->
+	<script type="text/javascript" src="${base}/static/pic-upload/js/jquery.min.js"></script>
+	<script type="text/javascript" src="${base}/static/pic-upload/js/up.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			getSort_0("#sort_0 select");
+		});
+
+		$("#add_book_btn").click(function() {
+			//alert("asd");
+			var name = $("#bookname").val();
+			var price = $("#bookprice").val();
+			var grade = $("#bookgrade").val();
+			var author = $("#bookauthor").val();
+			var press = $("#bookpress").val();
+			var version = $("#bookversion").val();
+			var sort_0 = $("#sort_0 select").val();
+			var sort_1 = $("#sort_1 select").val();
+			
+	        var file = document.getElementById("file");
+	        //存放图片的父元素
+	        var fileList = file.files;
+	        var pic_num = fileList.length;
+	        
+	        var remark = $("#bookremark").val();
+	        
+	        //alert("name:"+name+"price:"+price+"grade:"+grade+"author:"+author+"press:"+press+"version:"+version+"sort_0:"+sort_0+"sort_1:"+sort_1+"pic_num:"+pic_num+"remark:"+remark);
+			console.log("name:"+name+"price:"+price+"grade:"+grade+"author:"+author+"press:"+press+"version:"+version+"sort_0:"+sort_0+"sort_1:"+sort_1+"pic_num:"+pic_num+"remark:"+remark);
+	        if(check(name,price,grade,author,press,version,sort_0,sort_1,pic_num)){
+	        	document.getElementById("add_book_form").submit();
+	        	/* $.ajax({
+	        		url : "${base}/add/add_book",
+	        		data : {
+	        			
+	        		}
+	        	}); */
+	        }
+			//document.getElementById("add_book_form").submit();
+		});
+		
+		function check(name,price,grade,author,press,version,sort_0,sort_1,pic_num){
+			if(name==''||name==null){
+				alert("请输入书名");
+				return false;
+			}
+			if(price==''||price==null){
+				alert("请输入单价");
+				return false;
+			}
+			if(grade==''||grade==null){
+				alert("");
+				return false;
+			}
+			if(author==''||author==null){
+				alert("请输入书籍作者");
+				return false;
+			}
+			if(press==''||press==null){
+				alert("请输入书籍出版社");
+				return false;
+			}
+			if(version==''||version==null){
+				alert("请输入书籍版本号");
+				return false;
+			}
+			if(sort_0==''||sort_0==null){
+				alert("请选择1级分类");
+				return false;
+			}
+			if(sort_1==''||sort_1==null){
+				alert("请选择2级分类");
+				return false;
+			}
+			if(pic_num==''||pic_num==null){
+				alert("请添加图片");
+				return false;
+			}
+			return true;
+		}
+
+		//匹配输入的价格，如果不正确，清空
+		function checkpr() {
+			var price = document.getElementById("bookprice");
+			var pricereg = /^(0|([1-9]\d{0,9}(\.\d{1,2})?))$/;
+			if (!pricereg.test(price.value)) {
+				price.value = '';
+			}
+		}
+
+		//查出所有的一级分类
+		function getSort_0(ele) {
+			//清空之前下拉列表的值
+			$(ele).empty();
+			$.ajax({
+				url : "${base}/admin/book_list/sort_0",
+				type : "GET",
+				success : function(result) {
+					//console.log(result);
+					//alert("查询一级分类成功");
+					$("#sort_0 select").append("<option value=''>全部</option>");
+					var sorts = result.extend.sort_0;
+					$.each(sorts, function(index, item) {
+						var option = $("<option></option>").append(item.sort_0)
+								.attr("value", item.sort_0);
+						$("#sort_0 select").append(option);
+						//alert(item.sort_0);
+					});
+				},
+				error : function(result) {
+					console.log(result);
+					alert("查询一级分类错误");
+				}
+			});
+		}
+		//查出所有的二级分类
+		function getSort_1(ele) {
+			var sort_0 = $("#sort_0 select").val();
+			//alert("sort1"+sort_0);
+			//清空之前下拉列表的值
+			$(ele).empty();
+			$.ajax({
+				url : "${base}/admin/book_list/sort_1",
+				data : "sort_0=" + sort_0,
+				type : "POST",
+				success : function(result) {
+					//console.log(result);
+					//alert("查询二级分类成功");
+					$("#sort_1 select").append("<option value=''>全部</option>");
+					var sorts = result.extend.sort_1;
+					$.each(sorts, function(index, item) {
+						var option = $("<option></option>").append(item.sort_1)
+								.attr("value", item.sort_1);
+						$("#sort_1 select").append(option);
+						//alert(item.sort_0);
+					});
+				},
+				error : function(result) {
+					console.log(result);
+					alert("查询二级分类错误");
+				}
+			});
+		}
+	</script>
+</body>
+</html>

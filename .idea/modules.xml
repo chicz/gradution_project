@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ap-common/ap-common.iml" filepath="$PROJECT_DIR$/ap-common/ap-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/graduation_project.iml" filepath="$PROJECT_DIR$/.idea/graduation_project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/overlord/overlord.iml" filepath="$PROJECT_DIR$/overlord/overlord.iml" />
+      <module fileurl="file://$PROJECT_DIR$/overlord-admin/overlord-admin.iml" filepath="$PROJECT_DIR$/overlord-admin/overlord-admin.iml" />
+    </modules>
+  </component>
+</project>

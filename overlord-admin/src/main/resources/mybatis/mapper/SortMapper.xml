@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sam.admin.dao.SortMapper">
+	<resultMap id="sortResultMap" type="com.sam.admin.entity.Sort">
+		<id property="id" column="id" />
+		<result property="sort_0" column="sort_0" />
+		<result property="sort_1" column="sort_1" />
+		<result property="number" column="number" />
+	</resultMap>
+
+	<select id="selectSort_sort_0" resultMap="sortResultMap">
+         select distinct sort_0 from tb_sort	
+	</select> 
+	
+	<select id="selectSort1BySort0" parameterType="string" resultMap="sortResultMap">
+	    select * from tb_sort
+	    <where>
+	        <if test="sort_0 != null">
+	            sort_0 = #{sort_0}
+	        </if>
+	    </where> 
+	</select>
+	
+	<select id="selectSortBySort_1" parameterType="string" resultMap="sortResultMap">
+	    select * from tb_sort
+	    <where>
+	        <if test="sort_1!=null">
+	            sort_1 = #{sort_1}
+	        </if>
+	    </where>
+	</select>
+
+</mapper>
